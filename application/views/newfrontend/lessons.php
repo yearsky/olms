@@ -162,6 +162,7 @@ $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
                                 <p class="card-text"><?php echo $lesson_details['lesson_type'] == 'quiz' ? get_phrase('no_instruction_found') : get_phrase("no_summary_found"); ?></p>
                             <?php else : ?>
                                 <p class="card-text"><?php echo $lesson_details['summary']; ?></p>
+                                <iframe src="<?= base_url('uploads/lesson_files/' . $lesson_details['attachment']); ?>" frameborder="0" class="w-100" style="height: 600px;"></iframe>
                             <?php endif; ?>
                         </div>
                     </div>

@@ -651,5 +651,22 @@
     "disable": "Disable",
     "user_added_successfully": "User added successfully",
     "welcom": "Welcom",
-    "no_records_found": "No records found"
+    "no_records_found": "No records found",
+    "class": "Class",
+    "add_new_class": "Add new class",
+    "users_management": "Users management",
+    "teachers": "Teachers",
+    "students_update_successfully": "Students update successfully",
+    "student_added_successfully": "Student added successfully",
+    "add_teachers": "Add teachers",
+    "teacher_edit": "Teacher edit",
+    "teacher_edit_form": "Teacher edit form",
+    "teacher_add": "Teacher add",
+    "teacher_add_form": "Teacher add form",
+    "teacher_added_successfully": "Teacher added successfully",
+    "today_courses": "Today courses",
+    "murid_gibs": "Murid gibs",
+    "admin_admin": "Admin admin",
+    "select_class": "Select class",
+    "select_teachers": "Select teachers"
 }

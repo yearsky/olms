@@ -31,7 +31,7 @@ $user_details = $this->user_model->get_user($this->session->userdata('user_id'))
                 <li><a class="nav-link scrollto" href="<?= site_url('home/contact') ?>"><b>CONTACT US</b></a></li>
 
 
-                <li class="dropdown"><a href="#!"><span><b> <?php echo $user_details['first_name'] . ' ' . $user_details['last_name']; ?></b></span>
+                <li class="dropdown"><a href="#!"><span><b> <?php echo get_phrase($user_details['first_name'] . ' ' . $user_details['last_name']); ?></b></span>
                         &nbsp;
                         <i class="bi bi-chevron-down"></i></a>
                     <ul>
