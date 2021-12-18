@@ -22,7 +22,6 @@
     <link href="newfrontend/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link href="https://www.dafontfree.net/embed/Y2VudHVyeS1nb3RoaWMtcmVndWxhciZkYXRhLzQwL2MvMTAxOTUwL0dPVEhJQy5UVEY" rel="stylesheet" type="text/css" />
 
     <!-- Vendor CSS Files -->
     <link href="<?php echo base_url() . 'assets/newfrontend/assets/vendor/aos/aos.css'; ?>" rel="stylesheet">
@@ -31,6 +30,7 @@
     <link href="<?php echo base_url() . 'assets/newfrontend/assets/vendor/boxicons/css/boxicons.min.css'; ?>" rel="stylesheet">
     <link href="<?php echo base_url() . 'assets/newfrontend/assets/vendor/glightbox/css/glightbox.min.css'; ?>" rel="stylesheet">
     <link href="<?php echo base_url() . 'assets/newfrontend/assets/vendor/swiper/swiper-bundle.min.css'; ?>" rel="stylesheet">
+    <link href="<?= base_url() . 'assets/newfrontend/assets/vendor/remixicon-2/remixicon.css;' ?>" rel="stylesheet">
 
     <link rel="stylesheet" href="<?php echo base_url() . 'assets/frontend/default/css/jquery.webui-popover.min.css'; ?>">
     <link rel="stylesheet" href="<?php echo base_url() . 'assets/frontend/default/css/select2.min.css'; ?>">

@@ -22,12 +22,53 @@ class User_model extends CI_Model {
         return $this->db->get('users');
     }
 
+    public function get_userbyclass() {
+        $query = $this->db->select("users.id,CONCAT(users.first_name,' " . " ',users.last_name)as name, users.email,users.password,users.biography,users.social_links ,kelas.name as kelas")
+            ->from('users')
+            ->join('students', 'users.id = students.user_id')
+            ->join('kelas', 'students.kelas_id = kelas.id_kelas')
+            ->get();
+
+        return $query;
+
+
+        // $query = $this->db->query("CALL getUser()");
+        // mysqli_next_result($this->db->conn_id);
+        // if ($query->num_rows() > 0) {
+        //     return $query->result_array();
+        // }
+    }
+
     public function get_teacher($user_id = 0) {
         if ($user_id > 0) {
             $this->db->where('id', $user_id);
         }
         $this->db->where('role_id', 3);
         return $this->db->get('users');
+    }
+
+    public function fetch_teachers() {
+        return $this->db->get('teachers');
+    }
+
+
+    public function get_students($user_id = 0) {
+        if ($user_id > 0) {
+            $this->db->where('user_id', $user_id);
+        }
+        return $this->db->get('students');
+    }
+
+    public function get_all_students($param2 = 0) {
+        if ($param2 > 0) {
+            $this->db->where('id', $user_id);
+        }
+        $this->db->where('role_id', 2);
+        return $this->db->get('users');
+    }
+
+    public function get_students_by_id($user_id = "") {
+        return $this->db->get_where('students', array('id_students' => $user_id))->result_array();
     }
 
     public function get_all_user($user_id = 0) {
@@ -37,45 +78,7 @@ class User_model extends CI_Model {
         return $this->db->get('users');
     }
 
-    public function add_user() {
-        $validity = $this->check_duplication('on_create', $this->input->post('email'));
-        if ($validity == false) {
-            $this->session->set_flashdata('error_message', get_phrase('email_duplication'));
-        } else {
-            $data['first_name'] = html_escape($this->input->post('first_name'));
-            $data['last_name'] = html_escape($this->input->post('last_name'));
-            $data['email'] = html_escape($this->input->post('email'));
-            $data['password'] = sha1(html_escape($this->input->post('password')));
-            $social_link['facebook'] = html_escape($this->input->post('facebook_link'));
-            $social_link['twitter'] = html_escape($this->input->post('twitter_link'));
-            $social_link['linkedin'] = html_escape($this->input->post('linkedin_link'));
-            $data['social_links'] = json_encode($social_link);
-            $data['biography'] = $this->input->post('biography');
-            $data['role_id'] = 2;
-            $data['date_added'] = strtotime(date("Y-m-d H:i:s"));
-            $data['wishlist'] = json_encode(array());
-            $data['watch_history'] = json_encode(array());
-            $data['status'] = 1;
-            // Add paypal keys
-            $paypal_info = array();
-            $paypal['production_client_id'] = html_escape($this->input->post('paypal_client_id'));
-            array_push($paypal_info, $paypal);
-            $data['paypal_keys'] = json_encode($paypal_info);
-            // Add Stripe keys
-            $stripe_info = array();
-            $stripe_keys = array(
-                'public_live_key' => html_escape($this->input->post('stripe_public_key')),
-                'secret_live_key' => html_escape($this->input->post('stripe_secret_key'))
-            );
-            array_push($stripe_info, $stripe_keys);
-            $data['stripe_keys'] = json_encode($stripe_info);
 
-            $this->db->insert('users', $data);
-            $user_id = $this->db->insert_id();
-            $this->upload_user_image($user_id);
-            $this->session->set_flashdata('flash_message', get_phrase('user_added_successfully'));
-        }
-    }
     public function add_students() {
         $validity = $this->check_duplication('on_create', $this->input->post('email'));
         if ($validity == false) {
@@ -92,14 +95,20 @@ class User_model extends CI_Model {
             $data['biography'] = $this->input->post('biography');
             $data['role_id'] = 2;
             $data['date_added'] = strtotime(date("Y-m-d H:i:s"));
-
             $data['status'] = 1;
             $this->db->insert('users', $data);
             $user_id = $this->db->insert_id();
             $this->upload_user_image($user_id);
+            $data1['user_id'] = $user_id;
+            $data1['kelas_id'] = html_escape($this->input->post('sub_class_id'));
+            $data1['first_name'] = html_escape($this->input->post('first_name'));
+            $data1['last_name'] = html_escape($this->input->post('last_name'));
+            $this->db->insert('students', $data1);
             $this->session->set_flashdata('flash_message', get_phrase('student_added_successfully'));
         }
     }
+
+
 
     public function add_teachers() {
         $validity = $this->check_duplication('on_create', $this->input->post('email'));
@@ -121,7 +130,12 @@ class User_model extends CI_Model {
             $data['status'] = 1;
             $this->db->insert('users', $data);
             $user_id = $this->db->insert_id();
-            $this->upload_user_image($user_id);
+            $this->upload_teachers_image($user_id);
+            $data1['user_id'] = $user_id;
+            $data1['first_name'] = html_escape($this->input->post('first_name'));
+            $data1['last_name'] = html_escape($this->input->post('last_name'));
+            $data1['email'] = html_escape($this->input->post('email'));
+            $this->db->insert('teachers', $data1);
             $this->session->set_flashdata('flash_message', get_phrase('teacher_added_successfully'));
         }
     }
@@ -208,6 +222,11 @@ class User_model extends CI_Model {
 
             $this->db->where('id', $user_id);
             $this->db->update('users', $data);
+            $data1['kelas_id'] = html_escape($this->input->post('sub_class_id'));
+            $data1['first_name'] = html_escape($this->input->post('first_name'));
+            $data1['last_name'] = html_escape($this->input->post('last_name'));
+            $this->db->where('user_id', $user_id);
+            $this->db->update('students', $data1);
             $this->upload_user_image($user_id);
             $this->session->set_flashdata('flash_message', get_phrase('students_update_successfully'));
         } else {
@@ -252,6 +271,9 @@ class User_model extends CI_Model {
     public function delete_students($user_id = "") {
         $this->db->where('id', $user_id);
         $this->db->delete('users');
+        $this->db->where('user_id', $user_id);
+        $this->db->delete('students');
+        unlink('uploads/user_image/' . $user_id . '.jpg');
         $this->session->set_flashdata('flash_message', get_phrase('students_deleted_successfully'));
     }
     public function delete_teachers($user_id = "") {
@@ -271,13 +293,22 @@ class User_model extends CI_Model {
     }
 
     public function my_courses() {
-        return $this->db->get_where('enrol', array('user_id' => $this->session->userdata('user_id')));
+        $students = $this->db->get_where('students', array('user_id' => $this->session->userdata('user_id')))->row_array();
+        $byclass = $students['kelas_id'];
+        return $this->db->get_where('course', array('sub_kelas_id' => $byclass));
+        // return $students;
     }
 
     public function upload_user_image($user_id) {
         if (isset($_FILES['user_image']) && $_FILES['user_image']['name'] != "") {
             move_uploaded_file($_FILES['user_image']['tmp_name'], 'uploads/user_image/' . $user_id . '.jpg');
-            $this->session->set_flashdata('flash_message', get_phrase('user_update_successfully'));
+            $this->session->set_flashdata('flash_message', get_phrase('user_added_successfully'));
+        }
+    }
+    public function upload_teachers_image($user_id) {
+        if (isset($_FILES['user_image']) && $_FILES['user_image']['name'] != "") {
+            move_uploaded_file($_FILES['user_image']['tmp_name'], 'uploads/teachers_image/' . $user_id . '.jpg');
+            $this->session->set_flashdata('flash_message', get_phrase('teachers_added_successfully'));
         }
     }
 
@@ -366,6 +397,14 @@ class User_model extends CI_Model {
             return base_url() . 'uploads/user_image/' . $user_id . '.jpg';
         else
             return base_url() . 'uploads/user_image/placeholder.png';
+    }
+
+    public function get_teachers_image_url($user_id) {
+
+        if (file_exists('uploads/teachers_image/' . $user_id . '.jpg'))
+            return base_url() . 'uploads/teachers_image/' . $user_id . '.jpg';
+        else
+            return base_url() . 'uploads/teachers_image/placeholder.png';
     }
     public function get_instructor_list() {
         $query1 = $this->db->get_where('course', array('status' => 'active'))->result_array();

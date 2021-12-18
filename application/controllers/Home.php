@@ -23,6 +23,8 @@ class Home extends CI_Controller {
 
     public function home() {
         $page_data['page_name'] = "home";
+        $page_data['sliders'] = $this->crud_model->get_sliders()->result_array();
+        $page_data['prestasi'] = $this->crud_model->get_prestasi()->result_array();
         $page_data['page_title'] = get_phrase('home');
         $this->load->view('newfrontend/index', $page_data);
     }
@@ -33,10 +35,41 @@ class Home extends CI_Controller {
         $this->load->view('newfrontend/index', $page_data);
     }
 
+    public function about() {
+        $page_data['page_name'] = "about";
+        $page_data['page_title'] = get_phrase('about');
+        $this->load->view('newfrontend/index', $page_data);
+    }
+
+    public function programs() {
+        $page_data['page_name'] = "programs";
+        $page_data['page_title'] = get_phrase('programs');
+        $this->load->view('newfrontend/index', $page_data);
+    }
+
+    public function gallery() {
+        $page_data['page_name'] = "gallery";
+        $page_data['page_title'] = get_phrase('gallery');
+        $page_data['gallery'] = $this->crud_model->get_gallery()->result_array();
+        $this->load->view('newfrontend/index', $page_data);
+    }
+
+    public function academic() {
+        $page_data['page_name'] = "academic";
+        $page_data['page_title'] = get_phrase('academic');
+        $this->load->view('newfrontend/index', $page_data);
+    }
+
     public function contact() {
         $page_data['page_name'] = "contact";
         $page_data['page_title'] = get_phrase('contact');
         $this->load->view('newfrontend/index', $page_data);
+    }
+
+    public function sent_message_contact() {
+        $this->crud_model->sent_message_contact();
+        $this->session->set_flashdata('flash_message', get_phrase('message_sent!'));
+        redirect(site_url('home/contact'), 'refresh');
     }
 
     public function shopping_cart() {

@@ -25,8 +25,128 @@ class Crud_model extends CI_Model {
         return $this->db->get('kelas');
     }
 
+    function fetch_class() {
+
+        // $this->db->order_by('name', 'ASC');
+        return $this->db->get('kelas');
+    }
+
+    public function edit_from_class($param2 = "") {
+        if ($param2 != "") {
+            $this->db->where('id_kelas', $param2);
+        }
+
+        return $this->db->get('kelas');
+    }
+
+    public function get_all_course() {
+        $query = $this->db->get_where('course', array('status' => 'active'))->result_array();
+        return $query;
+    }
+
+    public function sent_message_contact() {
+        $data['full_name'] = html_escape($this->input->post('name'));
+        $data['email'] = html_escape($this->input->post('email'));
+        $data['subject'] = html_escape($this->input->post('subject'));
+        $data['message'] = html_escape($this->input->post('message'));
+        $data['date_send'] = strtotime(date('h:i, d-M-Y'));
+
+        $this->db->insert('Contact', $data);
+    }
+
+    function fetch_student_by_class($class_id) {
+
+
+        $query = $this->db->select("id_students,CONCAT(users.first_name,' " . " ',users.last_name) as name,students.kelas")
+            ->from('students')
+            ->where('students.kelas_id', $class_id)
+            ->join('users', 'students.user_id = users.id')
+            ->get();
+        $output = '<option value="">Select Students</option>';
+        foreach ($query->result() as $row) {
+            $output .= '<option value="' . $row->id_students . '">' . $row->name . '</option>';
+        }
+        return $output;
+    }
+
+
+
+    public function getAbsensi() {
+        $query = $this->db->select("absensi.id,CONCAT(teachers.first_name,' " . " ',teachers.last_name) as guru,CONCAT(students.first_name,' " . " ',students.last_name) as siswa, course.title as mapel,kelas.name as kelas,absensi.description,timestamp")
+            ->from('absensi')
+            ->join('teachers', 'absensi.teacher_id = teachers.id_teachers')
+            ->join('students', 'absensi.student_id = students.id_students')
+            ->join('course', 'absensi.course_id = course.id')
+            ->join('kelas', 'absensi.class_id = kelas.id_kelas')
+            ->get();
+        // $query = 
+        return $query;
+    }
+
+    function get_absensi_by_id($absensi_id) {
+        $query = $this->db->get_where('absensi', array('id' =>  $absensi_id));
+        return $query;
+    }
+
+    function get_student_id($student_id) {
+        $query = $this->db->get_where('students', array('kelas_id' =>  $student_id));
+        return $query;
+    }
+
+    public function fetch_absensi($param2) {
+        if ($param2 != "") {
+            $this->db->where('id', $param2);
+        }
+        return $this->db->get('absensi');
+    }
+
+    public function add_absensi($param1 = "") {
+        $data['teacher_id'] = html_escape($this->input->post('teachers'));
+        $data['student_id'] = html_escape($this->input->post('students'));
+        $data['course_id'] = html_escape($this->input->post('courses'));
+        $data['class_id'] = html_escape($this->input->post('class'));
+        $data['description'] = html_escape($this->input->post('keterangan'));
+        $data['timestamp'] = strtotime(date('h:i, d-M-Y'));
+
+        $this->db->insert('absensi', $data);
+        // return $this->input->post();
+    }
+
+    public function update_absensi() {
+        $data['teacher_id'] = html_escape($this->input->post('teachers'));
+        $data['student_id'] = html_escape($this->input->post('students'));
+        $data['course_id'] = html_escape($this->input->post('courses'));
+        $data['class_id'] = html_escape($this->input->post('class'));
+        $data['description'] = html_escape($this->input->post('keterangan'));
+        $data['timestamp'] = strtotime(date('h:i, d-M-Y'));
+
+        $this->db->where('id', $this->input->post('absensi_id'));
+        $this->db->update('absensi', $data);
+
+        // $data['teacher_id'] = '2';
+        // $data['student_id'] = '3';
+        // $data['course_id'] = '1';
+        // $data['class_id'] = '3';
+        // $data['description'] = 'Hadir';
+        // $data['timestamp'] = strtotime(date('D, d-M-Y'));
+
+        // $this->db->where('id', $user_id);
+        // $this->db->update('absensi', $data);
+    }
+
+    public function delete_absensi($user_id) {
+        $this->db->where('id', $user_id);
+        $this->db->delete('absensi');
+    }
+    // public function get_class_by_id($id) {
+    //     return $this->db->get_where('students', array('kelas_id' => $id));
+    // }
+
     public function get_category_details_by_id($id) {
         return $this->db->get_where('category', array('id' => $id));
+    }
+    public function get_sliders_details_by_id($id) {
+        return $this->db->get_where('sliders', array('id' => $id));
     }
     public function get_class_details_by_id($id) {
         return $this->db->get_where('kelas', array('id_kelas' => $id));
@@ -121,6 +241,168 @@ class Crud_model extends CI_Model {
     }
     public function get_sub_class($parent_id = "") {
         return $this->db->get_where('kelas', array('parent' => $parent_id))->result_array();
+    }
+
+    public function get_sliders() {
+        return $this->db->get('sliders');
+    }
+
+    public function get_gallery() {
+        return $this->db->get('gallery');
+    }
+
+    public function get_prestasi() {
+        return $this->db->get('prestasi');
+    }
+
+    public function add_prestasi() {
+        $data['title'] = html_escape($this->input->post('title'));
+        $data['description'] = html_escape($this->input->post('description'));
+
+        if (!file_exists('uploads/prestasi/')) {
+            mkdir('uploads/prestasi/', 777, true);
+        }
+
+        if (isset($_FILES['prestasi_image']) && $_FILES['prestasi_image']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['prestasi_image']['tmp_name'], 'uploads/prestasi/' . $data['image'] . '.jpg');
+            $this->session->set_flashdata('flash_message', get_phrase('prestasi_added_successfully'));
+        }
+
+        $data['date_added'] = strtotime(date('D, d-M-Y'));
+        $this->db->insert('prestasi', $data);
+    }
+
+    public function edit_prestasi($id) {
+        $data['title']   = html_escape($this->input->post('title'));
+        $data['description'] = html_escape($this->input->post('description'));
+
+        if ($_FILES['prestasi_image']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['prestasi_image']['tmp_name'], 'uploads/prestasi/' . $data['image']);
+        }
+
+        $data['last_modified'] = strtotime(date('D, d-M-Y'));
+
+        $this->db->where('id', $id);
+        $this->db->update('prestasi', $data);
+    }
+
+    public function add_gallery() {
+        $data['title'] = html_escape($this->input->post('title'));
+        $data['description'] = html_escape($this->input->post('description'));
+        $data['status'] = html_escape($this->input->post('status'));
+        $data['category'] = html_escape($this->input->post('category'));
+
+        if (!file_exists('uploads/gallery/')) {
+            mkdir('uploads/gallery/', 777, true);
+        }
+
+        if (isset($_FILES['gallery_image']) && $_FILES['gallery_image']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['gallery_image']['tmp_name'], 'uploads/gallery/' . $data['image'] . '.jpg');
+            $this->session->set_flashdata('flash_message', get_phrase('gallery_added_successfully'));
+        }
+
+        $data['date_added'] = strtotime(date('D, d-M-Y'));
+        $this->db->insert('gallery', $data);
+    }
+
+    public function edit_gallery($id) {
+        $data['title']   = html_escape($this->input->post('title'));
+        $data['description'] = html_escape($this->input->post('description'));
+        $data['category'] = html_escape($this->input->post('category'));
+
+        if ($_FILES['gallery_image']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['gallery_image']['tmp_name'], 'uploads/gallery/' . $data['image']);
+        }
+
+        $data['date_added'] = strtotime(date('D, d-M-Y'));
+
+        $this->db->where('id', $id);
+        $this->db->update('gallery', $data);
+    }
+
+    public function add_slider() {
+        $data['title'] = html_escape($this->input->post('title'));
+        $data['description'] = html_escape($this->input->post('description'));
+        $data['status'] = html_escape($this->input->post('status'));
+
+        if (!file_exists('uploads/sliders/')) {
+            mkdir('uploads/sliders/', 777, true);
+        }
+
+        if (isset($_FILES['slider_image']) && $_FILES['slider_image']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['slider_image']['tmp_name'], 'uploads/sliders/' . $data['image'] . '.jpg');
+            $this->session->set_flashdata('flash_message', get_phrase('sliders_added_successfully'));
+        }
+        $this->db->insert('sliders', $data);
+    }
+
+
+    public function edit_sl($param1 = "") {
+
+        if ($param1 != "") {
+            $data['title']   = html_escape($this->input->post('title'));
+            $data['description'] = html_escape($this->input->post('description'));
+
+            if ($_FILES['slider_image']['name'] != "") {
+                $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+                move_uploaded_file($_FILES['slider_image']['tmp_name'], 'uploads/sliders/' . $data['image']);
+            }
+
+            $this->db->where('id', $param1);
+            $this->db->update('sliders', $data);
+        } else {
+            redirect(site_url('admin/sliders'), 'refresh');
+            $this->session->set_flashdata('flash_message', get_phrase('sliders_failed'));
+        }
+    }
+
+    public function get_slider_url($slider_id) {
+
+        if (file_exists('uploads/sliders/' . $slider_id . '.jpg'))
+            return base_url() . 'uploads/sliders/' . $slider_id . '.jpg';
+        else
+            return base_url() . 'uploads/user_image/placeholder.png';
+    }
+    public function get_gallery_url($gallery_id) {
+
+        if (file_exists('uploads/gallery/' . $gallery_id . '.jpg'))
+            return base_url() . 'uploads/gallery/' . $gallery_id . '.jpg';
+        else
+            return base_url() . 'uploads/user_image/placeholder.png';
+    }
+    public function get_prestasi_url($prestasi_id) {
+
+        if (file_exists('uploads/prestasi/' . $prestasi_id . '.jpg'))
+            return base_url() . 'uploads/prestasi/' . $prestasi_id . '.jpg';
+        else
+            return base_url() . 'uploads/user_image/placeholder.png';
+    }
+
+    public function delete_sliders($slider_id) {
+        $previous_data = $this->db->get_where('sliders', array('id' => $id))->row_array();
+        unlink('uploads/sliders/' . $previous_data['image'] . '.jpg');
+        $this->db->where('id', $slider_id);
+        $this->db->delete('sliders');
+    }
+
+    public function delete_gallery($id) {
+        $previous_data = $this->db->get_where('gallery', array('id' => $id))->row_array();
+        unlink('uploads/gallery/' . $previous_data['image'] . '.jpg');
+
+        $this->db->where('id', $id);
+        $this->db->delete('gallery');
+    }
+    public function delete_prestasi($id) {
+        $previous_data = $this->db->get_where('prestasi', array('id' => $id))->row_array();
+        unlink('uploads/prestasi/' . $previous_data['image'] . '.jpg');
+
+        $this->db->where('id', $id);
+        $this->db->delete('prestasi');
     }
 
     public function enrol_history($course_id = "") {

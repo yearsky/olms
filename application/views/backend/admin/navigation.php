@@ -64,6 +64,12 @@ $status_wise_courses = $this->crud_model->get_status_wise_courses();
 				<span><?php echo get_phrase('courses'); ?></span>
 			</a>
 		</li>
+		<li class="side-nav-item">
+			<a href="<?php echo site_url('admin/absensi'); ?>" class="side-nav-link <?php if ($page_name == 'absensi' || $page_name == 'absensi_add' || $page_name == 'absensi_edit') echo 'active'; ?>">
+				<i class="dripicons-checklist"></i>
+				<span><?php echo get_phrase('absensi'); ?></span>
+			</a>
+		</li>
 
 		<li class="side-nav-item <?php if ($page_name == 'students' || $page_name == 'student_add' || $page_name == 'teacher') : ?> active <?php endif; ?>">
 			<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'students' || $page_name == 'student_add' || $page_name == 'teacher') : ?> active <?php endif; ?>">
@@ -82,40 +88,32 @@ $status_wise_courses = $this->crud_model->get_status_wise_courses();
 			</ul>
 		</li>
 
-		<li class="side-nav-item <?php if ($page_name == 'enrol_history' || $page_name == 'enrol_student') : ?> active <?php endif; ?>">
-			<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'enrol_history' || $page_name == 'enrol_student') : ?> active <?php endif; ?>">
-				<i class="dripicons-network-3"></i>
-				<span> <?php echo get_phrase('enrolment'); ?> </span>
+		<li class="side-nav-item <?php if ($page_name == 'layouts' || $page_name == 'layouts_add' || $page_name == 'layouts_edit') : ?> active <?php endif; ?>">
+			<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'layouts' || $page_name == 'layouts_add' || $page_name == 'layouts_edit') : ?> active <?php endif; ?>">
+				<i class="dripicons-browser"></i>
+				<span> <?php echo get_phrase('Layouts'); ?> </span>
 				<span class="menu-arrow"></span>
 			</a>
 			<ul class="side-nav-second-level" aria-expanded="false">
-				<li class="<?php if ($page_name == 'enrol_history') echo 'active'; ?>">
-					<a href="<?php echo site_url('admin/enrol_history'); ?>"><?php echo get_phrase('enrol_history'); ?></a>
+				<li class="<?php if ($page_name == 'sliders' || $page_name == 'sliders_add' || $page_name == 'sliders_edit') echo 'active'; ?>">
+					<a href="<?php echo site_url('admin/sliders'); ?>"><?php echo get_phrase('Sliders'); ?></a>
 				</li>
 
-				<li class="<?php if ($page_name == 'enrol_student') echo 'active'; ?>">
-					<a href="<?php echo site_url('admin/enrol_student'); ?>"><?php echo get_phrase('enrol_a_student'); ?></a>
+				<li class="<?php if ($page_name == 'gallery' || $page_name == 'gallery_add' || $page_name == 'gallery_edit') echo 'active'; ?>">
+					<a href="<?php echo site_url('admin/gallery'); ?>"><?php echo get_phrase('Gallery'); ?></a>
 				</li>
+				<li class="<?php if ($page_name == 'blog' || $page_name == 'blog_add' || $page_name == 'blog_edit') echo 'active'; ?>">
+					<a href="<?php echo site_url('admin/blog'); ?>"><?php echo get_phrase('Blog'); ?></a>
+				</li>
+				<li class="<?php if ($page_name == 'prestasi' || $page_name == 'prestasi_add' || $page_name == 'prestasi_edit') echo 'active'; ?>">
+					<a href="<?php echo site_url('admin/prestasi'); ?>"><?php echo get_phrase('Prestasi'); ?></a>
+				</li>
+
 			</ul>
 		</li>
 
-		<li class="side-nav-item">
-			<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'admin_revenue' || $page_name == 'instructor_revenue' || $page_name == 'invoice') : ?> active <?php endif; ?>">
-				<i class="dripicons-box"></i>
-				<span> <?php echo get_phrase('report'); ?> </span>
-				<span class="menu-arrow"></span>
-			</a>
-			<ul class="side-nav-second-level" aria-expanded="false">
-				<li class="<?php if ($page_name == 'admin_revenue') echo 'active'; ?>"> <a href="<?php echo site_url('admin/admin_revenue'); ?>"><?php echo get_phrase('admin_revenue'); ?></a> </li>
-				<?php if (get_settings('allow_instructor') == 1) : ?>
-					<li class="<?php if ($page_name == 'instructor_revenue') echo 'active'; ?>">
-						<a href="<?php echo site_url('admin/instructor_revenue'); ?>">
-							<?php echo get_phrase('instructor_revenue'); ?> <span class="badge badge-danger-lighten badge-pill"><?php echo $this->db->get_where('payment', array('instructor_payment_status' => 0))->num_rows() ?></span>
-						</a>
-					</li>
-				<?php endif; ?>
-			</ul>
-		</li>
+
+
 
 		<li class="side-nav-item">
 			<a href="<?php echo site_url('admin/message'); ?>" class="side-nav-link <?php if ($page_name == 'message' || $page_name == 'message_new' || $page_name == 'message_read') echo 'active'; ?>">
@@ -137,27 +135,18 @@ $status_wise_courses = $this->crud_model->get_status_wise_courses();
 				<li class="<?php if ($page_name == 'frontend_settings') echo 'active'; ?>">
 					<a href="<?php echo site_url('admin/frontend_settings'); ?>"><?php echo get_phrase('website_settings'); ?></a>
 				</li>
-				<li class="<?php if ($page_name == 'payment_settings') echo 'active'; ?>">
-					<a href="<?php echo site_url('admin/payment_settings'); ?>"><?php echo get_phrase('payment_settings'); ?></a>
-				</li>
+
 				<li class="<?php if ($page_name == 'instructor_settings') echo 'active'; ?>">
 					<a href="<?php echo site_url('admin/instructor_settings'); ?>"><?php echo get_phrase('instructor_settings'); ?></a>
 				</li>
-				<li class="<?php if ($page_name == 'manage_language') echo 'active'; ?>">
+				<!-- <li class="<?php if ($page_name == 'manage_language') echo 'active'; ?>">
 					<a href="<?php echo site_url('admin/manage_language'); ?>"><?php echo get_phrase('language_settings'); ?></a>
 				</li>
 				<li class="<?php if ($page_name == 'smtp_settings') echo 'active'; ?>">
 					<a href="<?php echo site_url('admin/smtp_settings'); ?>"><?php echo get_phrase('smtp_settings'); ?></a>
-				</li>
-				<li class="<?php if ($page_name == 'about') echo 'active'; ?>">
-					<a href="<?php echo site_url('admin/about'); ?>"><?php echo get_phrase('about'); ?></a>
-				</li>
-				<li class="<?php if ($page_name == 'themes') echo 'active'; ?>">
-					<a href="<?php echo site_url('admin/themes'); ?>"><?php echo get_phrase('themes'); ?></a>
-				</li>
-				<li class="<?php if ($page_name == 'mobile_app') echo 'active'; ?>">
-					<a href="<?php echo site_url('admin/mobile_app'); ?>"><?php echo get_phrase('mobile_app'); ?></a>
-				</li>
+				</li> -->
+
+
 			</ul>
 		</li>
 	</ul>

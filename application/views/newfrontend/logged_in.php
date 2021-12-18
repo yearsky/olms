@@ -9,7 +9,7 @@ $user_details = $this->user_model->get_user($this->session->userdata('user_id'))
     <div class="container d-flex align-items-center justify-content-between">
 
         <div class="logo">
-            <h1><a href="<?php echo site_url('home') ?>"><b>LMS <span>GIBS</span></b></a></h1>
+            <a href="<?php echo site_url('home') ?>"><img src="<?php echo base_url() . 'assets/newfrontend/assets/img/name.png' ?>" alt=""></a>
         </div>
 
         <nav id="navbar" class="navbar">

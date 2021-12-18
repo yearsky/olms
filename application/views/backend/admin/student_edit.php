@@ -92,6 +92,22 @@ $social_links = json_decode($user_data['social_links'], true);
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label" for="sub_class_id"><?php echo get_phrase('Class'); ?><span class="required">*</span></label>
+                                            <div class="col-md-9">
+                                                <select class="form-control select2" data-toggle="select2" name="sub_class_id" id="sub_class_id" required>
+                                                    <option value=""><?php echo get_phrase('select_class'); ?></option>
+                                                    <?php foreach ($class->result_array() as $cl) : ?>
+                                                        <optgroup label="<?php echo $cl['name']; ?>">
+                                                            <?php $sub_class = $this->crud_model->get_sub_class($cl['id_kelas']);
+                                                            foreach ($sub_class as $scl) : ?>
+                                                                <option value="<?php echo $scl['id_kelas']; ?>" <?php if ($scl['id_kelas'] == $students['kelas_id']) echo 'selected'; ?>><?php echo $scl['name']; ?></option>
+                                                            <?php endforeach; ?>
+                                                        </optgroup>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div> <!-- end col -->
                                 </div> <!-- end row -->
                             </div>

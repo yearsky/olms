@@ -4,48 +4,25 @@
         <div class="carousel-inner" role="listbox">
 
             <!-- Slide 1 -->
-            <div class="carousel-item active">
-                <div class="carousel-container">
-                    <div class="col-lg-6 d-lg-flex flex-lg-column justify-content-center align-items-stretch pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-up">
-                        <div>
-                            <h1><span><b> MARILAH </b></span>
-                                <b>Wujudkan Masa Depan Bersama Global Islamic Boarding School</b>
-                            </h1>
-                            <h2>GIBS, sebagai sekolah berasrama, menghadirkan after school program yang dikembangkan<br>
-                                demi terciptanya lingkungan pendidikan yang islami yang merupakan pendukung utama<br>
-                                dalam mencapai tujuan pendidikan di GIBS
-                            </h2>
-                            <a href="#" class="download-btn"><i class="bx bxl-apple"></i> Untuk Guru</a>
-                            <a href="#" class="download-btn"><i class="bx bxl-apple"></i> Untuk Siswa</a>
+            <?php foreach ($sliders as $sl) : ?>
+                <div class="carousel-item active">
+                    <div class="carousel-container">
+                        <div class="col-lg-6 d-lg-flex flex-lg-column justify-content-center align-items-stretch pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-up">
+                            <div>
+                                <h1>
+                                    <b><?= $sl['title']; ?></b>
+                                </h1>
+                                <h2><?= $sl['description']; ?>
+                                </h2>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
+                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/bg 2.png'; ?>" width="65%" class="img-fluid animated" alt="" alt="">
                         </div>
                     </div>
-                    <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
-                        <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/bg 2.png'; ?>" width="65%" class="img-fluid animated" alt="" alt="">
-                    </div>
                 </div>
-            </div>
-
-
-            <div class="carousel-item">
-                <div class="carousel-container">
-                    <div class="col-lg-6 d-lg-flex flex-lg-column justify-content-center align-items-stretch pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-up">
-                        <div>
-                            <h1><span>5 New Stream<br>
-                                    Perminatan Jurusan
-                                </span></h1>
-                            <h3>
-                                1) Natural Science (NS) dan Social Science (SS) - Academic Stream<br>
-                                2) Islamic Scholar<br>
-                                3) Professional Skills<br>
-                                4) Entrepreneurship
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
-                        <img src="newfrontend/assets/img/bg3.png" width="65%" class="img-fluid animated" alt="" alt="">
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
 
             <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
@@ -96,18 +73,14 @@
         <div class="container">
             <div class="section-title">
                 <h2><br><b>So, what is your role to this world ?</b></h2><br>
-                <video width="55%" height="55%" controls muted poster="">
-                    <source src="newfrontend/assets/img/demo.mp4" type="video/mp4">
-                    browser anda tidak didukung
-                </video>
-                <p>
-                <h1><b>GIBS AT A GLANCE</b></h1>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/FxPiSYBwHQ0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <h1><b>GIBS AT A GLANCE</b></h1><br />
             </div>
         </div>
     </section><!-- End video Section -->
 
     <!-- ======= Picture Section (content 4) ======= -->
-    <section id="picture" class="picture">
+    <section id="picture" class="picture" style="background: #3DB2FF;">
 
         <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
 
@@ -116,7 +89,7 @@
                 <div class="col-lg-3 col-md-4">
                     <div class="picture-item">
                         <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 2.jfif'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 2.jfif'; ?>" alt="" class="img-fluid">
+                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 13.png'; ?>" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
@@ -124,7 +97,7 @@
                 <div class="col-lg-3 col-md-4">
                     <div class="picture-item">
                         <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 13.png'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 13.jpg'; ?>" alt="" class="img-fluid">
+                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.png'; ?>" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
@@ -132,7 +105,7 @@
                 <div class="col-lg-3 col-md-4">
                     <div class="picture-item">
                         <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.png'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.jpg'; ?>" alt="" class="img-fluid">
+                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.png'; ?>" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
@@ -140,7 +113,7 @@
                 <div class="col-lg-3 col-md-4">
                     <div class="picture-item">
                         <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 15.png'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 15.jpg'; ?>" alt="" class="img-fluid">
+                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 15.png'; ?>" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
@@ -188,11 +161,12 @@
         <div class="container-fluid" data-aos="fade-up">
             <div class="gallery-slider swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><a href="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="gallery-lightbox" data-gall="gallery-carousel"><img src="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="img-fluid" alt=""></a></div>
-                    <div class="swiper-slide"><a href="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="gallery-lightbox" data-gall="gallery-carousel"><img src="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="img-fluid" alt=""></a></div>
-                    <div class="swiper-slide"><a href="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="gallery-lightbox" data-gall="gallery-carousel"><img src="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="img-fluid" alt=""></a></div>
-                    <div class="swiper-slide"><a href="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="gallery-lightbox" data-gall="gallery-carousel"><img src="<?php echo base_url() . 'assets/newfrontend/assets/img/prestasi/foto1.png'; ?>" class="img-fluid" alt=""></a></div>
-
+                    <?php foreach ($prestasi as $pr) : ?>
+                        <div class="swiper-slide">
+                            <a href="<?php echo $this->crud_model->get_prestasi_url($pr['image']); ?>" class="gallery-lightbox" data-gall="gallery-carousel">
+                                <img src="<?php echo $this->crud_model->get_prestasi_url($pr['image']); ?>" class="img-fluid" alt=""></a>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -203,12 +177,11 @@
     <!-- ======= Testimonials Section (content 8)======= -->
     <section id="testimonials" class="testimonials section-bg">
         <div class="container" data-aos="fade-up">
-            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="testimonials-slider swiper">
                 <div class="swiper-wrapper">
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
                             <h3>Radina Nur Syafa </h3>
                             <h4>VIII &amp; Girls</h4>
                             <p>
@@ -221,7 +194,6 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="newfrontend/assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
                             <h3>Naufal Wijaya</h3>
                             <h4>XI Social Science Boys</h4>
                             <p>
@@ -234,22 +206,31 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                            <h3>Jena Karlis</h3>
-                            <h4>Store Owner</h4>
+                            <h3>Rizki Najwa</h3>
+                            <h4>ITS Surabaya</h4>
                             <p>
                                 <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                                "Pendidikan karakter membuat saya memiliki perubahan dan memiliki pandangan masa depan, dengan giat belajar di GIBS"
                                 <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                             </p>
                         </div>
                     </div>
 
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <h3>Marsha Prifirani</h3>
+                            <h4>Universitas Gajah Mada</h4>
+                            <p>
+                                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                                " Dengan belajar yang giat dan tekun di GIBS saya bisa berhasil masuk kedalam Universitas Gajah Mada, dan dengan doa dari guru-guru"
+                                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                            </p>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-pagination"></div>
         </div>
     </section><!-- End Testimonials Section -->
 

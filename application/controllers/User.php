@@ -1,9 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends CI_Controller {
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
 
         $this->load->database();
@@ -11,22 +10,18 @@ class User extends CI_Controller {
         /*cache control*/
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
-
-        if (get_settings('allow_instructor') != 1){
-            redirect(site_url('home'), 'refresh');
-        }
     }
 
     public function index() {
-        if ($this->session->userdata('user_login') == true) {
+        if ($this->session->userdata('teacher_login') == true) {
             $this->courses();
-        }else {
+        } else {
             redirect(site_url('login'), 'refresh');
         }
     }
 
     public function courses() {
-        if ($this->session->userdata('user_login') != true) {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
         $page_data['selected_category_id']   = isset($_GET['category_id']) ? $_GET['category_id'] : "all";
@@ -40,6 +35,26 @@ class User extends CI_Controller {
         $this->load->view('backend/index', $page_data);
     }
 
+    // public function courses() {
+    //     if ($this->session->userdata('admin_login') != true) {
+    //         redirect(site_url('login'), 'refresh');
+    //     }
+
+
+    //     $page_data['selected_category_id']   = isset($_GET['category_id']) ? $_GET['category_id'] : "all";
+    //     $page_data['selected_instructor_id'] = isset($_GET['instructor_id']) ? $_GET['instructor_id'] : "all";
+    //     $page_data['selected_status']        = isset($_GET['status']) ? $_GET['status'] : "all";
+    //     $page_data['selected_class_id']         = isset($_GET['class_id']) ? $_GET['class_id'] : "all";
+    //     $page_data['courses']                = $this->crud_model->filter_course_for_backend($page_data['selected_category_id'], $page_data['selected_instructor_id'],  $page_data['selected_class_id'], $page_data['selected_status']);
+    //     $page_data['status_wise_courses']    = $this->crud_model->get_status_wise_courses();
+    //     $page_data['instructors']            = $this->user_model->get_instructor();
+    //     $page_data['class']                  = $this->crud_model->get_class();
+    //     $page_data['page_name']              = 'courses';
+    //     $page_data['categories']             = $this->crud_model->get_categories();
+    //     $page_data['page_title']             = get_phrase('active_courses');
+    //     $this->load->view('backend/index', $page_data);
+    // }
+
     public function course_actions($param1 = "", $param2 = "") {
         if ($this->session->userdata('user_login') != true) {
             redirect(site_url('login'), 'refresh');
@@ -48,25 +63,19 @@ class User extends CI_Controller {
         if ($param1 == "add") {
             $this->crud_model->add_course();
             redirect(site_url('user/courses'), 'refresh');
-
-        }
-        elseif ($param1 == "edit") {
+        } elseif ($param1 == "edit") {
             $this->is_the_course_belongs_to_current_instructor($param2);
             $this->crud_model->update_course($param2);
             redirect(site_url('user/courses'), 'refresh');
-
-        }
-        elseif ($param1 == 'delete') {
+        } elseif ($param1 == 'delete') {
             $this->is_the_course_belongs_to_current_instructor($param2);
             $this->crud_model->delete_course($param2);
             redirect(site_url('user/courses'), 'refresh');
-        }
-        elseif ($param1 == 'draft') {
+        } elseif ($param1 == 'draft') {
             $this->is_the_course_belongs_to_current_instructor($param2);
             $this->crud_model->change_course_status('draft', $param2);
             redirect(site_url('user/courses'), 'refresh');
-        }
-        elseif ($param1 == 'publish') {
+        } elseif ($param1 == 'publish') {
             $this->is_the_course_belongs_to_current_instructor($param2);
             $this->crud_model->change_course_status('pending', $param2);
             redirect(site_url('user/courses'), 'refresh');
@@ -80,18 +89,17 @@ class User extends CI_Controller {
         }
 
         if ($param1 == 'add_course') {
-            $page_data['languages']	= $this->get_all_languages();
+            $page_data['languages']    = $this->get_all_languages();
             $page_data['categories'] = $this->crud_model->get_categories();
             $page_data['page_name'] = 'course_add';
             $page_data['page_title'] = get_phrase('add_course');
             $this->load->view('backend/index', $page_data);
-
-        }elseif ($param1 == 'course_edit') {
+        } elseif ($param1 == 'course_edit') {
             $this->is_the_course_belongs_to_current_instructor($param2);
             $page_data['page_name'] = 'course_edit';
             $page_data['course_id'] =  $param2;
             $page_data['page_title'] = get_phrase('edit_course');
-            $page_data['languages']	= $this->get_all_languages();
+            $page_data['languages']    = $this->get_all_languages();
             $page_data['categories'] = $this->crud_model->get_categories();
             $this->load->view('backend/index', $page_data);
         }
@@ -126,7 +134,7 @@ class User extends CI_Controller {
             $date_range                   = explode(" - ", $date_range);
             $page_data['timestamp_start'] = strtotime($date_range[0]);
             $page_data['timestamp_end']   = strtotime($date_range[1]);
-        }else {
+        } else {
             $page_data['timestamp_start'] = strtotime('-29 days', time());
             $page_data['timestamp_end']   = strtotime(date("m/d/Y"));
         }
@@ -141,7 +149,7 @@ class User extends CI_Controller {
         $all_files = $this->get_list_of_language_files();
         foreach ($all_files as $file) {
             $info = pathinfo($file);
-            if( isset($info['extension']) && strtolower($info['extension']) == 'json') {
+            if (isset($info['extension']) && strtolower($info['extension']) == 'json') {
                 $file_name = explode('.json', $info['basename']);
                 array_push($language_files, $file_name[0]);
             }
@@ -149,13 +157,13 @@ class User extends CI_Controller {
         return $language_files;
     }
 
-    function get_list_of_language_files($dir = APPPATH.'/language', &$results = array()) {
+    function get_list_of_language_files($dir = APPPATH . '/language', &$results = array()) {
         $files = scandir($dir);
-        foreach($files as $key => $value){
-            $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
-            if(!is_dir($path)) {
+        foreach ($files as $key => $value) {
+            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+            if (!is_dir($path)) {
                 $results[] = $path;
-            } else if($value != "." && $value != "..") {
+            } else if ($value != "." && $value != "..") {
                 $this->get_list_of_directories_and_files($path, $results);
                 $results[] = $path;
             }
@@ -165,11 +173,11 @@ class User extends CI_Controller {
 
     function get_list_of_directories_and_files($dir = APPPATH, &$results = array()) {
         $files = scandir($dir);
-        foreach($files as $key => $value){
-            $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
-            if(!is_dir($path)) {
+        foreach ($files as $key => $value) {
+            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+            if (!is_dir($path)) {
                 $results[] = $path;
-            } else if($value != "." && $value != "..") {
+            } else if ($value != "." && $value != "..") {
                 $this->get_list_of_directories_and_files($path, $results);
                 $results[] = $path;
             }
@@ -179,14 +187,14 @@ class User extends CI_Controller {
 
     public function preview($course_id = '') {
         if ($this->session->userdata('user_login') != 1)
-        redirect(site_url('login'), 'refresh');
+            redirect(site_url('login'), 'refresh');
 
         $this->is_the_course_belongs_to_current_instructor($course_id);
         if ($course_id > 0) {
             $courses = $this->crud_model->get_course_by_id($course_id);
             if ($courses->num_rows() > 0) {
                 $course_details = $courses->row_array();
-                redirect(site_url('home/lesson/'.slugify($course_details['title']).'/'.$course_details['id']), 'refresh');
+                redirect(site_url('home/lesson/' . slugify($course_details['title']) . '/' . $course_details['id']), 'refresh');
             }
         }
         redirect(site_url('user/courses'), 'refresh');
@@ -200,16 +208,14 @@ class User extends CI_Controller {
         if ($param2 == 'add') {
             $this->crud_model->add_section($param1);
             $this->session->set_flashdata('flash_message', get_phrase('section_has_been_added_successfully'));
-        }
-        elseif ($param2 == 'edit') {
+        } elseif ($param2 == 'edit') {
             $this->crud_model->edit_section($param3);
             $this->session->set_flashdata('flash_message', get_phrase('section_has_been_updated_successfully'));
-        }
-        elseif ($param2 == 'delete') {
+        } elseif ($param2 == 'delete') {
             $this->crud_model->delete_section($param1, $param3);
             $this->session->set_flashdata('flash_message', get_phrase('section_has_been_deleted_successfully'));
         }
-        redirect(site_url('user/course_form/course_edit/'.$param1));
+        redirect(site_url('user/course_form/course_edit/' . $param1));
     }
 
     public function lessons($course_id = "", $param1 = "", $param2 = "") {
@@ -219,20 +225,17 @@ class User extends CI_Controller {
         if ($param1 == 'add') {
             $this->crud_model->add_lesson();
             $this->session->set_flashdata('flash_message', get_phrase('lesson_has_been_added_successfully'));
-            redirect('user/course_form/course_edit/'.$course_id);
-        }
-        elseif ($param1 == 'edit') {
+            redirect('user/course_form/course_edit/' . $course_id);
+        } elseif ($param1 == 'edit') {
             $this->crud_model->edit_lesson($param2);
             $this->session->set_flashdata('flash_message', get_phrase('lesson_has_been_updated_successfully'));
-            redirect('user/course_form/course_edit/'.$course_id);
-        }
-        elseif ($param1 == 'delete') {
+            redirect('user/course_form/course_edit/' . $course_id);
+        } elseif ($param1 == 'delete') {
             $this->crud_model->delete_lesson($param2);
             $this->session->set_flashdata('flash_message', get_phrase('lesson_has_been_deleted_successfully'));
-            redirect('user/course_form/course_edit/'.$course_id);
-        }
-        elseif ($param1 == 'filter') {
-            redirect('user/lessons/'.$this->input->post('course_id'));
+            redirect('user/course_form/course_edit/' . $course_id);
+        } elseif ($param1 == 'filter') {
+            redirect('user/lessons/' . $this->input->post('course_id'));
         }
         $page_data['page_name'] = 'lessons';
         $page_data['lessons'] = $this->crud_model->get_lessons('course', $course_id);
@@ -259,16 +262,14 @@ class User extends CI_Controller {
         if ($action == 'add') {
             $this->crud_model->add_quiz($course_id);
             $this->session->set_flashdata('flash_message', get_phrase('quiz_has_been_added_successfully'));
-        }
-        elseif ($action == 'edit') {
+        } elseif ($action == 'edit') {
             $this->crud_model->edit_quiz($quiz_id);
             $this->session->set_flashdata('flash_message', get_phrase('quiz_has_been_updated_successfully'));
-        }
-        elseif ($action == 'delete') {
+        } elseif ($action == 'delete') {
             $this->crud_model->delete_section($course_id, $quiz_id);
             $this->session->set_flashdata('flash_message', get_phrase('quiz_has_been_deleted_successfully'));
         }
-        redirect(site_url('user/course_form/course_edit/'.$course_id));
+        redirect(site_url('user/course_form/course_edit/' . $course_id));
     }
 
     // Manage Quize Questions
@@ -281,17 +282,13 @@ class User extends CI_Controller {
         if ($action == 'add') {
             $response = $this->crud_model->add_quiz_questions($quiz_id);
             echo $response;
-        }
-
-        elseif ($action == 'edit') {
+        } elseif ($action == 'edit') {
             $response = $this->crud_model->update_quiz_questions($question_id);
             echo $response;
-        }
-
-        elseif ($action == 'delete') {
+        } elseif ($action == 'delete') {
             $response = $this->crud_model->delete_quiz_question($question_id);
             $this->session->set_flashdata('flash_message', get_phrase('question_has_been_deleted'));
-            redirect(site_url('user/course_form/course_edit/'.$quiz_details['course_id']));
+            redirect(site_url('user/course_form/course_edit/' . $quiz_details['course_id']));
         }
     }
 

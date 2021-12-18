@@ -8,6 +8,7 @@
 <script src="<?php echo base_url() . 'assets/newfrontend/assets/vendor/glightbox/js/glightbox.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'assets/newfrontend/assets/vendor/php-email-form/validate.js'; ?>"></script>
 <script src="<?php echo base_url() . 'assets/newfrontend/assets/vendor/swiper/swiper-bundle.min.js'; ?>"></script>
+<script src="<?php echo base_url() . 'assets/newfrontend/assets/vendor/isotope-layout-2/isotope.pkgd.min.js'; ?>"></script>
 
 <!-- Template Main JS File -->
 <script src="<?php echo base_url() . 'assets/newfrontend/assets/js/main.js'; ?>"></script>
@@ -29,3 +30,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 <script src="<?php echo base_url() . 'assets/frontend/default/js/bootstrap-tagsinput.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'assets/frontend/default/js/custom.js'; ?>"></script>
+<script src="<?= base_url() . 'assets/newfrontend/assets/vendor/waypoints-2/noframework.waypoints.js'; ?>"></script>
+
+<?php if ($this->session->flashdata('flash_message') != "") : ?>
+
+    <script type="text/javascript">
+        toastr.success('<?php echo $this->session->flashdata("flash_message"); ?>');
+    </script>
+
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error_message') != "") : ?>
+
+    <script type="text/javascript">
+        toastr.error('<?php echo $this->session->flashdata("error_message"); ?>');
+    </script>
+
+<?php endif; ?>
