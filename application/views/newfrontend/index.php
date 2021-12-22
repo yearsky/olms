@@ -49,7 +49,6 @@
     <!-- Template Main CSS File -->
     <link href="<?php echo base_url() . 'assets/newfrontend/assets/css/index2Style.css'; ?>" rel="stylesheet">
     <link href="<?php echo base_url() . 'assets/newfrontend/assets/css/index1style.css'; ?>" rel="stylesheet">
-    <link href="<?php echo base_url() . 'assets/newfrontend/assets/css/style.css'; ?>" rel="stylesheet">
 
 </head>
 

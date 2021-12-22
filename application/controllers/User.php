@@ -35,33 +35,70 @@ class User extends CI_Controller {
         $this->load->view('backend/index', $page_data);
     }
 
-    // public function courses() {
-    //     if ($this->session->userdata('admin_login') != true) {
-    //         redirect(site_url('login'), 'refresh');
-    //     }
+    public function absensi() {
+        if ($this->session->userdata('teacher_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+        $page_data['page_name'] = 'absensi';
+        $page_data['page_title'] = get_phrase('absensi');
+        $page_data['teachers'] = $this->user_model->get_teacher();
+        $page_data['absensi'] = $this->crud_model->getAbsensi()->result_array();
+        $this->load->view('backend/index', $page_data);
+    }
 
-
-    //     $page_data['selected_category_id']   = isset($_GET['category_id']) ? $_GET['category_id'] : "all";
-    //     $page_data['selected_instructor_id'] = isset($_GET['instructor_id']) ? $_GET['instructor_id'] : "all";
-    //     $page_data['selected_status']        = isset($_GET['status']) ? $_GET['status'] : "all";
-    //     $page_data['selected_class_id']         = isset($_GET['class_id']) ? $_GET['class_id'] : "all";
-    //     $page_data['courses']                = $this->crud_model->filter_course_for_backend($page_data['selected_category_id'], $page_data['selected_instructor_id'],  $page_data['selected_class_id'], $page_data['selected_status']);
-    //     $page_data['status_wise_courses']    = $this->crud_model->get_status_wise_courses();
-    //     $page_data['instructors']            = $this->user_model->get_instructor();
-    //     $page_data['class']                  = $this->crud_model->get_class();
-    //     $page_data['page_name']              = 'courses';
-    //     $page_data['categories']             = $this->crud_model->get_categories();
-    //     $page_data['page_title']             = get_phrase('active_courses');
-    //     $this->load->view('backend/index', $page_data);
-    // }
-
-    public function course_actions($param1 = "", $param2 = "") {
-        if ($this->session->userdata('user_login') != true) {
+    public function absensi_actions($param1 = "", $param2 = "") {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
 
         if ($param1 == "add") {
-            $this->crud_model->add_course();
+            $this->crud_model->add_absensi();
+            $this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+            redirect(site_url('user/absensi'), 'refresh');
+        } elseif ($param1 == "edit") {
+            $this->crud_model->update_absensi();
+            $this->session->set_flashdata('flash_message', get_phrase('data_updated_successfully'));
+            redirect(site_url('user/absensi'), 'refresh');
+        } elseif ($param1 == 'delete') {
+            $this->crud_model->delete_absensi($param2);
+            $this->session->set_flashdata('flash_message', get_phrase('data_deleted_successfully'));
+            redirect(site_url('user/absensi'), 'refresh');
+        }
+    }
+
+    public function absensi_form($param1 = "", $param2 = "") {
+        if ($this->session->userdata('teacher_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+
+        if ($param1 == 'add_absensi_form') {
+            $page_data['page_name'] = 'absensi_add';
+            $page_data['class'] = $this->crud_model->fetch_class()->result_array();
+            $page_data['courses'] = $this->crud_model->get_all_course();
+            $page_data['teachers'] = $this->user_model->fetch_teachers()->result_array();
+            $page_data['students'] = $this->user_model->get_all_students()->result_array();
+            $page_data['page_title'] = get_phrase('absensi_add');
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == 'edit_absensi_form') {
+            $page_data['page_name'] = 'absensi_edit';
+            $page_data['absensi'] = $this->crud_model->fetch_absensi($param2)->row_array();
+            $page_data['teachers'] = $this->user_model->fetch_teachers()->result_array();
+            $page_data['students'] = $this->user_model->get_all_students()->result_array();
+            $page_data['courses'] = $this->crud_model->get_all_course();
+            $page_data['class'] = $this->crud_model->get_class();
+            $page_data['user_id'] = $param2;
+            $page_data['page_title'] = get_phrase('student_edit');
+            $this->load->view('backend/index', $page_data);
+        }
+    }
+
+    public function course_actions($param1 = "", $param2 = "") {
+        if ($this->session->userdata('teacher_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+
+        if ($param1 == "add") {
+            $this->crud_model->add_course_teachers();
             redirect(site_url('user/courses'), 'refresh');
         } elseif ($param1 == "edit") {
             $this->is_the_course_belongs_to_current_instructor($param2);
@@ -77,24 +114,27 @@ class User extends CI_Controller {
             redirect(site_url('user/courses'), 'refresh');
         } elseif ($param1 == 'publish') {
             $this->is_the_course_belongs_to_current_instructor($param2);
-            $this->crud_model->change_course_status('pending', $param2);
+            $this->crud_model->change_course_status('active', $param2);
             redirect(site_url('user/courses'), 'refresh');
         }
     }
 
     public function course_form($param1 = "", $param2 = "") {
 
-        if ($this->session->userdata('user_login') != true) {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
 
         if ($param1 == 'add_course') {
-            $page_data['languages']    = $this->get_all_languages();
+            $page_data['class']  = $this->crud_model->get_class();
+            $page_data['teachers'] = $this->user_model->get_teacher();
             $page_data['categories'] = $this->crud_model->get_categories();
             $page_data['page_name'] = 'course_add';
             $page_data['page_title'] = get_phrase('add_course');
             $this->load->view('backend/index', $page_data);
         } elseif ($param1 == 'course_edit') {
+            $page_data['class']  = $this->crud_model->get_class();
+            $page_data['teachers'] = $this->user_model->get_teacher();
             $this->is_the_course_belongs_to_current_instructor($param2);
             $page_data['page_name'] = 'course_edit';
             $page_data['course_id'] =  $param2;
@@ -186,7 +226,7 @@ class User extends CI_Controller {
     }
 
     public function preview($course_id = '') {
-        if ($this->session->userdata('user_login') != 1)
+        if ($this->session->userdata('teacher_login') != 1)
             redirect(site_url('login'), 'refresh');
 
         $this->is_the_course_belongs_to_current_instructor($course_id);
@@ -201,7 +241,7 @@ class User extends CI_Controller {
     }
 
     public function sections($param1 = "", $param2 = "", $param3 = "") {
-        if ($this->session->userdata('user_login') != true) {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
 
@@ -219,7 +259,7 @@ class User extends CI_Controller {
     }
 
     public function lessons($course_id = "", $param1 = "", $param2 = "") {
-        if ($this->session->userdata('user_login') != true) {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
         if ($param1 == 'add') {
@@ -247,7 +287,7 @@ class User extends CI_Controller {
     // This function checks if this course belongs to current logged in instructor
     function is_the_course_belongs_to_current_instructor($course_id) {
         $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
-        if ($course_details['user_id'] != $this->session->userdata('user_id')) {
+        if ($course_details['teachers_id'] != $this->session->userdata('user_id')) {
             $this->session->set_flashdata('error_message', get_phrase('you_do_not_have_right_to_access_this_course'));
             redirect(site_url('user/courses'), 'refresh');
         }
@@ -255,7 +295,7 @@ class User extends CI_Controller {
 
     // Manage Quizes
     public function quizes($course_id = "", $action = "", $quiz_id = "") {
-        if ($this->session->userdata('user_login') != true) {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
 
@@ -274,7 +314,7 @@ class User extends CI_Controller {
 
     // Manage Quize Questions
     public function quiz_questions($quiz_id = "", $action = "", $question_id = "") {
-        if ($this->session->userdata('user_login') != true) {
+        if ($this->session->userdata('teacher_login') != true) {
             redirect(site_url('login'), 'refresh');
         }
         $quiz_details = $this->crud_model->get_lessons('lesson', $quiz_id)->row_array();

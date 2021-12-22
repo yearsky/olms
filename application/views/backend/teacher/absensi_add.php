@@ -66,7 +66,7 @@
                             </select>
                         </div>
 
-                        <p id="demo"></p>
+
 
 
                         <button type="button" class="btn btn-primary" onclick="checkRequiredFields()"><?php echo get_phrase("submit"); ?></button>
@@ -81,7 +81,7 @@
     $(document).ready(function() {
         $('#class').change(function() {
             var kelas = $('#class').val();
-            // document.getElementById("demo").innerHTML = kelas;
+
             if (kelas != '') {
                 $.ajax({
                     url: "<?php echo site_url('admin/fetch_student_class'); ?>",

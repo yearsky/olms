@@ -40,7 +40,45 @@ class Admin extends CI_Controller {
     $this->load->view('backend/index.php', $page_data);
   }
 
+  public function blog($param1 = "", $id = "") {
+    if ($this->session->userdata('admin_login') != true) {
+      redirect(site_url('login'), 'refresh');
+    }
+    if ($param1 == "add") {
+      $this->crud_model->add_blog();
+      $this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+      redirect(site_url('admin/blog'), 'refresh');
+    } elseif ($param1 == "edit") {
+      $this->crud_model->edit_blog($id);
+      $this->session->set_flashdata('flash_message', get_phrase('data_edit_success'));
+      redirect(site_url('admin/blog'), 'refresh');
+    } elseif ($param1 == "delete") {
+      $this->crud_model->delete_blog($id);
+      $this->session->set_flashdata('flash_message', get_phrase('data_delete_successfully'));
+      redirect(site_url('admin/blog'), 'refresh');
+    }
+    $page_data['page_name'] = 'blog';
+    $page_data['page_title'] = get_phrase('blog');
+    $page_data['blog'] = $this->crud_model->get_blog()->result_array();
+    $this->load->view('backend/index', $page_data);
+  }
 
+  public function blog_form($param1 = "", $param2 = "") {
+    if ($this->session->userdata('admin_login') != true) {
+      redirect(site_url('login'), 'refresh');
+    }
+
+    if ($param1 == "add_blog_form") {
+      $page_data['page_name'] = 'blog_add';
+      $page_data['page_title'] = get_phrase('add_blog');
+    }
+    if ($param1 == "edit_blog_form") {
+      $page_data['page_name'] = 'blog_edit';
+      $page_data['page_title'] = get_phrase('edit_blog');
+      $page_data['blog_id'] = $param2;
+    }
+    $this->load->view('backend/index', $page_data);
+  }
 
   public function prestasi($param1 = "", $id = "") {
     if ($this->session->userdata('admin_login') != true) {

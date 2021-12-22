@@ -1,9 +1,9 @@
 <?php
-    $status_wise_courses = $this->crud_model->get_status_wise_courses();
-    $number_of_courses = $status_wise_courses['pending']->num_rows() + $status_wise_courses['active']->num_rows();
-    $number_of_lessons = $this->crud_model->get_lessons()->num_rows();
-    $number_of_enrolment = $this->crud_model->enrol_history()->num_rows();
-    $number_of_students = $this->user_model->get_user()->num_rows();
+$status_wise_courses = $this->crud_model->get_status_wise_courses();
+$number_of_courses = $status_wise_courses['pending']->num_rows() + $status_wise_courses['active']->num_rows();
+$number_of_lessons = $this->crud_model->get_lessons()->num_rows();
+$number_of_enrolment = $this->crud_model->enrol_history()->num_rows();
+$number_of_students = $this->user_model->get_user()->num_rows();
 ?>
 <div class="row">
     <div class="col-xl-12">
@@ -20,7 +20,7 @@
         <div class="card">
             <div class="card-body">
 
-                <h4 class="header-title mb-4"><?php echo get_phrase('admin_revenue_this_year'); ?></h4>
+                <h4 class="header-title mb-4"><?php echo get_phrase('Total Students'); ?></h4>
 
                 <div class="mt-3 chartjs-chart" style="height: 320px;">
                     <canvas id="task-area-chart"></canvas>
@@ -116,37 +116,37 @@
         </div>
     </div>
     <div class="col-xl-8">
-        <div class="card" id = 'unpaid-instructor-revenue'>
+        <div class="card" id='unpaid-instructor-revenue'>
             <div class="card-body">
                 <h4 class="header-title mb-3"><?php echo get_phrase('unpaid_instructor_revenues'); ?>
-                    <a href="<?php echo site_url('admin/instructor_revenue'); ?>" class="alignToTitle" id ="go-to-instructor-revenue"> <i class="mdi mdi-logout"></i> </a>
+                    <a href="<?php echo site_url('admin/instructor_revenue'); ?>" class="alignToTitle" id="go-to-instructor-revenue"> <i class="mdi mdi-logout"></i> </a>
                 </h4>
                 <div class="table-responsive">
                     <table class="table table-centered table-hover mb-0">
                         <tbody>
 
                             <?php
-                                $this->db->where('instructor_payment_status', 0);
-                                $this->db->where('instructor_revenue >', 0);
-                                $unpaid_instructor_revenues = $this->db->get('payment')->result_array();
-                                foreach ($unpaid_instructor_revenues as $key => $row):
+                            $this->db->where('instructor_payment_status', 0);
+                            $this->db->where('instructor_revenue >', 0);
+                            $unpaid_instructor_revenues = $this->db->get('payment')->result_array();
+                            foreach ($unpaid_instructor_revenues as $key => $row) :
                                 $course_details = $this->crud_model->get_course_by_id($row['course_id'])->row_array();
                                 $instructor_details = $this->user_model->get_all_user($course_details['user_id'])->row_array();
                             ?>
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1"><a href="<?php echo site_url('home/course/'.slugify($course_details['title']).'/'.$course_details['id']) ?>" class="text-body" target="_blank"><?php echo $course_details['title']; ?></a></h5>
-                                    <span class="text-muted font-13"><?php echo get_phrase('course_title'); ?></span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1"><a href="javascript:void(0);" class="text-body" style="cursor: auto;"><?php echo $instructor_details['first_name'].' '.$instructor_details['last_name']; ?></a></h5>
-                                    <small><?php echo get_phrase('email'); ?>: <span class="text-muted font-13"><?php echo $instructor_details['email']; ?></span></small>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1"><a href="javascript:void(0);" class="text-body" style="cursor: auto;"><?php echo currency($row['instructor_revenue']); ?></a></h5>
-                                    <small><span class="text-muted font-13"><?php echo get_phrase('instructor_revenue'); ?></span></small>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        <h5 class="font-14 my-1"><a href="<?php echo site_url('home/course/' . slugify($course_details['title']) . '/' . $course_details['id']) ?>" class="text-body" target="_blank"><?php echo $course_details['title']; ?></a></h5>
+                                        <span class="text-muted font-13"><?php echo get_phrase('course_title'); ?></span>
+                                    </td>
+                                    <td>
+                                        <h5 class="font-14 my-1"><a href="javascript:void(0);" class="text-body" style="cursor: auto;"><?php echo $instructor_details['first_name'] . ' ' . $instructor_details['last_name']; ?></a></h5>
+                                        <small><?php echo get_phrase('email'); ?>: <span class="text-muted font-13"><?php echo $instructor_details['email']; ?></span></small>
+                                    </td>
+                                    <td>
+                                        <h5 class="font-14 my-1"><a href="javascript:void(0);" class="text-body" style="cursor: auto;"><?php echo currency($row['instructor_revenue']); ?></a></h5>
+                                        <small><span class="text-muted font-13"><?php echo get_phrase('instructor_revenue'); ?></span></small>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
 
                         </tbody>

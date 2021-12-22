@@ -866,11 +866,12 @@ background: #71DFE7;
 .bg-view-blog{
 background-image: url('https://i.postimg.cc/g09L9JmP/bg1.png');
 background-size: cover;
-margin-top: -30px;
+margin-top: -55px;
 padding: 30px;
 }
 .bg-view-blog .cv-course-container{
 background-color: #71DFE7;
+border-radius: 10px;
 }
 .bg-view-blog .cv-course-container .read-more {
 -moz-text-align-last: right;
@@ -955,7 +956,6 @@ background: #C2FFF9;
 }
 .hero-view h2{
   margin-top: -230px;
-  margin-right: -180px;
   color:#fff;
   font-size: 60px;
   font-weight: 700;

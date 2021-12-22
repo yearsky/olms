@@ -3,9 +3,28 @@
 
         <div class="carousel-inner" role="listbox">
 
+            <div class="carousel-item active">
+                <div class="carousel-container">
+                    <div class="col-lg-6 d-lg-flex flex-lg-column justify-content-center align-items-stretch pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-up">
+                        <div>
+                            <h1><span><b> MARILAH </b></span>
+                                <b>Wujudkan Masa Depan Bersama Global Islamic Boarding School</b>
+                            </h1>
+                            <h2>GIBS, sebagai sekolah berasrama, menghadirkan after school program yang dikembangkan<br>
+                                demi terciptanya lingkungan pendidikan yang islami yang merupakan pendukung utama<br>
+                                dalam mencapai tujuan pendidikan di GIBS
+                            </h2>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
+                        <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/bg 2.png"' ?> width=" 65%" class="img-fluid animated" alt="" alt="">
+                    </div>
+                </div>
+            </div>
             <!-- Slide 1 -->
             <?php foreach ($sliders as $sl) : ?>
-                <div class="carousel-item active">
+                <div class="carousel-item">
                     <div class="carousel-container">
                         <div class="col-lg-6 d-lg-flex flex-lg-column justify-content-center align-items-stretch pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-up">
                             <div>
@@ -18,7 +37,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/bg 2.png'; ?>" width="65%" class="img-fluid animated" alt="" alt="">
+                            <img src="<?php echo $this->crud_model->get_slider_url($sl['image']); ?>" width="65%" class="img-fluid animated" alt="" alt="">
                         </div>
                     </div>
                 </div>
@@ -85,41 +104,15 @@
         <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
 
             <div class="row g-0">
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="picture-item">
-                        <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 2.jfif'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 13.png'; ?>" alt="" class="img-fluid">
-                        </a>
+                <?php foreach ($gallery as $gl) : ?>
+                    <div class="col-lg-3 col-md-4">
+                        <div class="picture-item">
+                            <a href="<?php echo $this->crud_model->get_gallery_url($gl['image']); ?>" class="picture-lightbox" data-gall="picture-item">
+                                <img src="<?php echo $this->crud_model->get_gallery_url($gl['image']); ?>" alt="" class="img-fluid">
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="picture-item">
-                        <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 13.png'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.png'; ?>" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="picture-item">
-                        <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.png'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 14.png'; ?>" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="picture-item">
-                        <a href="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 15.png'; ?>" class="picture-lightbox" data-gall="picture-item">
-                            <img src="<?php echo base_url() . 'assets/newfrontend/assets/img/gallery/GIBS 15.png'; ?>" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
-
-
-
+                <?php endforeach; ?>
             </div>
             <div class="swiper-pagination"></div>
             <div class="swiper-text">

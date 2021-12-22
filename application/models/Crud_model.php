@@ -55,12 +55,9 @@ class Crud_model extends CI_Model {
     }
 
     function fetch_student_by_class($class_id) {
-
-
-        $query = $this->db->select("id_students,CONCAT(users.first_name,' " . " ',users.last_name) as name,students.kelas")
+        $query = $this->db->select("id_students,CONCAT(students.first_name,' " . " ',students.last_name) as name")
             ->from('students')
             ->where('students.kelas_id', $class_id)
-            ->join('users', 'students.user_id = users.id')
             ->get();
         $output = '<option value="">Select Students</option>';
         foreach ($query->result() as $row) {
@@ -147,6 +144,9 @@ class Crud_model extends CI_Model {
     }
     public function get_sliders_details_by_id($id) {
         return $this->db->get_where('sliders', array('id' => $id));
+    }
+    public function get_blog_details_by_id($id) {
+        return $this->db->get_where('blog', array('id' => $id));
     }
     public function get_class_details_by_id($id) {
         return $this->db->get_where('kelas', array('id_kelas' => $id));
@@ -249,6 +249,13 @@ class Crud_model extends CI_Model {
 
     public function get_gallery() {
         return $this->db->get('gallery');
+    }
+    public function get_limit_gallery() {
+        $this->db->select('*');
+        $this->db->from('gallery');
+        $this->db->limit(4);
+        $query = $this->db->get();
+        return $query;
     }
 
     public function get_prestasi() {
@@ -361,6 +368,13 @@ class Crud_model extends CI_Model {
         }
     }
 
+    public function get_blog_url($id) {
+
+        if (file_exists('uploads/blog/' . $id . '.jpg'))
+            return base_url() . 'uploads/blog/' . $id . '.jpg';
+        else
+            return base_url() . 'uploads/user_image/placeholder.png';
+    }
     public function get_slider_url($slider_id) {
 
         if (file_exists('uploads/sliders/' . $slider_id . '.jpg'))
@@ -403,6 +417,62 @@ class Crud_model extends CI_Model {
 
         $this->db->where('id', $id);
         $this->db->delete('prestasi');
+    }
+    public function delete_blog($id) {
+        $previous_data = $this->db->get_where('blog', array('id' => $id))->row_array();
+        unlink('uploads/blog/' . $previous_data['image'] . '.jpg');
+
+        $this->db->where('id', $id);
+        $this->db->delete('blog');
+    }
+
+
+
+    public function get_blog() {
+        return $this->db->get('blog');
+    }
+
+    public function add_blog() {
+        $data['title'] = html_escape($this->input->post('title'));
+        $data['content'] = html_escape($this->input->post('description'));
+
+        if (!file_exists('uploads/blog/')) {
+            mkdir('uploads/blog/', 777, true);
+        }
+
+        if (isset($_FILES['blog_thumbnail']) && $_FILES['blog_thumbnail']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['blog_thumbnail']['tmp_name'], 'uploads/blog/' . $data['image'] . '.jpg');
+            $this->session->set_flashdata('flash_message', get_phrase('blog_added_successfully'));
+        }
+
+        $data['date_added'] = strtotime(date('D, d-M-Y'));
+        $data['meta_keyword'] = html_escape($this->input->post('meta_keywords'));
+        $data['meta_description'] = html_escape($this->input->post('meta_description'));
+
+        $this->db->insert('blog', $data);
+    }
+
+    public function edit_blog($id) {
+        $data['title'] = html_escape($this->input->post('title'));
+        $data['content'] = html_escape($this->input->post('description'));
+
+        if (!file_exists('uploads/blog/')) {
+            mkdir('uploads/blog/', 777, true);
+        }
+
+        if (isset($_FILES['blog_thumbnail']) && $_FILES['blog_thumbnail']['name'] != "") {
+            $data['image'] = md5(rand(10000000, 20000000)) . '.jpg';
+            move_uploaded_file($_FILES['blog_thumbnail']['tmp_name'], 'uploads/blog/' . $data['image'] . '.jpg');
+            $this->session->set_flashdata('flash_message', get_phrase('blog_added_successfully'));
+        }
+
+        $data['date_added'] = strtotime(date('D, d-M-Y'));
+        $data['meta_keyword'] = html_escape($this->input->post('meta_keywords'));
+        $data['meta_description'] = html_escape($this->input->post('meta_description'));
+
+        $this->db->where('id', $id);
+        $this->db->update('blog', $data);
     }
 
     public function enrol_history($course_id = "") {
@@ -687,6 +757,67 @@ class Crud_model extends CI_Model {
         $data['short_description'] = $this->input->post('short_description');
         $data['description'] = $this->input->post('description');
         $data['teachers_id'] = $this->input->post('teachers');
+        $data['outcomes'] = $outcomes;
+        $data['sub_category_id'] = $this->input->post('sub_category_id');
+        $category_details = $this->get_category_details_by_id($this->input->post('sub_category_id'))->row_array();
+        $data['category_id'] = $category_details['parent'];
+
+        $data['requirements'] = $requirements;
+        $data['video_url'] = html_escape($this->input->post('course_overview_url'));
+
+        if ($this->input->post('course_overview_url') != "") {
+            $data['course_overview_provider'] = html_escape($this->input->post('course_overview_provider'));
+        } else {
+            $data['course_overview_provider'] = "";
+        }
+
+        $data['date_added'] = strtotime(date('D, d-M-Y'));
+        $data['section'] = json_encode(array());
+        $data['is_top_course'] = $this->input->post('is_top_course');
+        $data['user_id'] = $this->session->userdata('user_id');
+        $data['meta_description'] = $this->input->post('meta_description');
+        $data['meta_keywords'] = $this->input->post('meta_keywords');
+        $admin_details = $this->user_model->get_admin_details()->row_array();
+        if ($admin_details['id'] == $data['user_id']) {
+            $data['is_admin'] = 1;
+        } else {
+            $data['is_admin'] = 0;
+        }
+        if ($param1 == "save_to_draft") {
+            $data['status'] = 'draft';
+        } else {
+            $data['status'] = 'pending';
+        }
+        $this->db->insert('course', $data);
+
+        $course_id = $this->db->insert_id();
+        // Create folder if does not exist
+        if (!file_exists('uploads/thumbnails/course_thumbnails')) {
+            mkdir('uploads/thumbnails/course_thumbnails', 0777, true);
+        }
+
+        if ($_FILES['course_thumbnail']['name'] != "") {
+            move_uploaded_file($_FILES['course_thumbnail']['tmp_name'], 'uploads/thumbnails/course_thumbnails/' . $course_id . '.jpg');
+        }
+        if ($data['status'] == 'approved') {
+            $this->session->set_flashdata('flash_message', get_phrase('course_added_successfully'));
+        } elseif ($data['status'] == 'pending') {
+            $this->session->set_flashdata('flash_message', get_phrase('course_added_successfully') . '. ' . get_phrase('please_wait_untill_Admin_approves_it'));
+        } elseif ($data['status'] == 'draft') {
+            $this->session->set_flashdata('flash_message', get_phrase('your_course_has_been_added_to_draft'));
+        }
+    }
+
+    public function add_course_teachers($param1 = "") {
+        $outcomes = $this->trim_and_return_json($this->input->post('outcomes'));
+        $requirements = $this->trim_and_return_json($this->input->post('requirements'));
+        $data['sub_kelas_id'] = $this->input->post('sub_class_id');
+        $class_details = $this->get_class_details_by_id($this->input->post('sub_class_id'))->row_array();
+        $data['kelas_id'] = $class_details['parent'];
+        $data['title'] = html_escape($this->input->post('title'));
+        $data['short_description'] = $this->input->post('short_description');
+        $data['description'] = $this->input->post('description');
+        $data['teachers_id'] = $this->input->post('teacher_id');
         $data['outcomes'] = $outcomes;
         $data['sub_category_id'] = $this->input->post('sub_category_id');
         $category_details = $this->get_category_details_by_id($this->input->post('sub_category_id'))->row_array();

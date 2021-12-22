@@ -25,45 +25,46 @@
             <div class="row mt-4">
                 <!-- blog main start -->
                 <div class="col-xl-9 col-lg-9 col-md-8">
+                    <?php foreach ($blog as $bl) : ?>
+                        <div class="cv-course-container">
+                            <br>
+                            <h5 style="text-align: center;"><?= $bl['title']; ?></h5>
 
-                    <div class="cv-course-container">
-                        <!-- <br><h5>{{ $blog->blog_title }}</h5> -->
+                            <div class="course-image my-3">
+                                <img src="<?php echo $this->crud_model->get_blog_url($bl['image']); ?>" style="max-width: 500px; display:block; margin-left:auto;margin-right:auto;">
+                            </div>
+                            <div class="row">
+                                <p><?= strip_tags(html_entity_decode($bl['content'])); ?></p>
+                                <div class="col-xl-6 col-lg-6 col-md-4 col-sm-4 col-12">
+                                    <div class="instructor-clist m-0 pt-1">
+                                        <div>
+                                            <i class="fas fa-edit"></i>&nbsp;
+                                            <span><i class="d-md-none d-sm-none d-lg-inline-block">Posted on</i></span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div class="course-image my-3">
-                            <img src="">
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-4 col-sm-4 col-12">
-                                <div class="instructor-clist m-0 pt-1">
-                                    <div>
-                                        <i class="fas fa-edit"></i>&nbsp;
-                                        <span><i class="d-md-none d-sm-none d-lg-inline-block">Posted on</i></span>
+                                <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8 col-12">
+                                    <div class="float-sm-right">
+                                        <button type="button" class="btn btn-sm social-btn-sm facebook-btn">
+                                            <i class="bx bxl-linkedin"></i>&nbsp;&nbsp;
+                                            <span>Linkedin</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm social-btn-sm twitter-btn">
+                                            <i class="bx bxl-instagram"></i>&nbsp;&nbsp;
+                                            <span>Instagram</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm social-btn-sm google-btn">
+                                            <i class="bx bxl-twitter"></i>&nbsp;&nbsp;
+                                            <span>Tweet</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8 col-12">
-                                <div class="float-sm-right">
-                                    <button type="button" class="btn btn-sm social-btn-sm facebook-btn">
-                                        <i class="bx bxl-linkedin"></i>&nbsp;&nbsp;
-                                        <span>Linkedin</span>
-                                    </button>
-                                    <button type="button" class="btn btn-sm social-btn-sm twitter-btn">
-                                        <i class="bx bxl-instagram"></i>&nbsp;&nbsp;
-                                        <span>Instagram</span>
-                                    </button>
-                                    <button type="button" class="btn btn-sm social-btn-sm google-btn">
-                                        <i class="bx bxl-twitter"></i>&nbsp;&nbsp;
-                                        <span>Tweet</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <hr class="mb-5 mt-4">
                         </div>
-
-                        <!-- <p>{!! $blog->description !!}</p> -->
-                        <hr class="mb-5 mt-4">
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
                 <!-- blog main end -->
 

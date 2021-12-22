@@ -724,5 +724,21 @@
     "choose_image": "Choose image",
     "prestasi_added_successfully": "Prestasi added successfully",
     "edit_prestasi": "Edit prestasi",
-    "edit_prestasi_form": "Edit prestasi form"
+    "edit_prestasi_form": "Edit prestasi form",
+    "total_students": "Total students",
+    "teacher_id": "Teacher id",
+    "add_blog": "Add blog",
+    "content": "Content",
+    "instructor_page": "Instructor page",
+    "show_full_biography": "Show full biography",
+    "add_new_blog": "Add new blog",
+    "blog_adding_form": "Blog adding form",
+    "back_to_blog_list": "Back to blog list",
+    "blog_title": "Blog title",
+    "enter_blog_title": "Enter blog title",
+    "blog_thumbnail": "Blog thumbnail",
+    "blog_thumbnails": "Blog thumbnails",
+    "blog_added_successfully": "Blog added successfully",
+    "edit_blog": "Edit blog",
+    "blog_edit": "Blog edit"
 }

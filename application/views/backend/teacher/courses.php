@@ -138,7 +138,6 @@
                                     <th><?php echo get_phrase('lesson_&_section'); ?></th>
                                     <th><?php echo get_phrase('enrolled_student'); ?></th>
                                     <th><?php echo get_phrase('status'); ?></th>
-                                    <th><?php echo get_phrase('price'); ?></th>
                                     <th><?php echo get_phrase('actions'); ?></th>
                                 </tr>
                             </thead>
@@ -175,17 +174,7 @@
                                                 <i class="mdi mdi-circle text-secondary" style="font-size: 19px;" data-toggle="tooltip" data-placement="top" title="" data-original-title="<?php echo get_phrase($course['status']); ?>"></i>
                                             <?php endif; ?>
                                         </td>
-                                        <td>
-                                            <?php if ($course['is_free_course'] == null) : ?>
-                                                <?php if ($course['discount_flag'] == 1) : ?>
-                                                    <span class="badge badge-dark-lighten"><?php echo currency($course['discounted_price']); ?></span>
-                                                <?php else : ?>
-                                                    <span class="badge badge-dark-lighten"><?php echo currency($course['price']); ?></span>
-                                                <?php endif; ?>
-                                            <?php elseif ($course['is_free_course'] == 1) : ?>
-                                                <span class="badge badge-success-lighten"><?php echo get_phrase('free'); ?></span>
-                                            <?php endif; ?>
-                                        </td>
+
                                         <td>
                                             <div class="dropright dropright">
                                                 <button type="button" class="btn btn-sm btn-outline-primary btn-rounded btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -25,9 +25,9 @@ $status_wise_courses = $this->crud_model->get_status_wise_courses();
             </a>
         </li>
         <li class="side-nav-item">
-            <a href="<?php echo site_url('user/instructor_revenue'); ?>" class="side-nav-link <?php if ($page_name == 'report' || $page_name == 'invoice') echo 'active'; ?>">
-                <i class="dripicons-media-shuffle"></i>
-                <span><?php echo get_phrase('instructor_revenue'); ?></span>
+            <a href="<?php echo site_url('user/absensi'); ?>" class="side-nav-link <?php if ($page_name == 'absensi' || $page_name == 'absensi_add' || $page_name == 'absensi_edit') echo 'active'; ?>">
+                <i class="dripicons-checklist"></i>
+                <span><?php echo get_phrase('absensi'); ?></span>
             </a>
         </li>
 

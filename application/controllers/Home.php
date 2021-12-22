@@ -25,6 +25,7 @@ class Home extends CI_Controller {
         $page_data['page_name'] = "home";
         $page_data['sliders'] = $this->crud_model->get_sliders()->result_array();
         $page_data['prestasi'] = $this->crud_model->get_prestasi()->result_array();
+        $page_data['gallery'] = $this->crud_model->get_limit_gallery()->result_array();
         $page_data['page_title'] = get_phrase('home');
         $this->load->view('newfrontend/index', $page_data);
     }
@@ -32,6 +33,7 @@ class Home extends CI_Controller {
     public function blog() {
         $page_data['page_name'] = "blog";
         $page_data['page_title'] = get_phrase('blog');
+        $page_data['blog'] = $this->crud_model->get_blog()->result_array();
         $this->load->view('newfrontend/index', $page_data);
     }
 
@@ -392,19 +394,19 @@ class Home extends CI_Controller {
         }
 
         // Check if the lesson contained course is purchased by the user
-        if (isset($page_data['lesson_id']) && $page_data['lesson_id'] > 0) {
-            $lesson_details = $this->crud_model->get_lessons('lesson', $page_data['lesson_id'])->row_array();
-            $lesson_id_wise_course_details = $this->crud_model->get_course_by_id($lesson_details['course_id'])->row_array();
-            if ($this->session->userdata('role_id') != 1 && $lesson_id_wise_course_details['user_id'] != $this->session->userdata('user_id')) {
-                if (!is_purchased($lesson_details['course_id'])) {
-                    redirect(site_url('home/course/' . slugify($course_details['title']) . '/' . $course_details['id']), 'refresh');
-                }
-            }
-        } else {
-            if (!is_purchased($course_id)) {
-                redirect(site_url('home/course/' . slugify($course_details['title']) . '/' . $course_details['id']), 'refresh');
-            }
-        }
+        // if (isset($page_data['lesson_id']) && $page_data['lesson_id'] > 0) {
+        //     $lesson_details = $this->crud_model->get_lessons('lesson', $page_data['lesson_id'])->row_array();
+        //     $lesson_id_wise_course_details = $this->crud_model->get_course_by_id($lesson_details['course_id'])->row_array();
+        //     if ($this->session->userdata('role_id') != 1 && $lesson_id_wise_course_details['user_id'] != $this->session->userdata('user_id')) {
+        //         if (!is_purchased($lesson_details['course_id'])) {
+        //             redirect(site_url('home/course/' . slugify($course_details['title']) . '/' . $course_details['id']), 'refresh');
+        //         }
+        //     }
+        // } else {
+        //     if (!is_purchased($course_id)) {
+        //         redirect(site_url('home/course/' . slugify($course_details['title']) . '/' . $course_details['id']), 'refresh');
+        //     }
+        // }
 
         $page_data['course_id']  = $course_id;
         $page_data['page_name']  = 'lessons';
