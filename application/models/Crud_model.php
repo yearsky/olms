@@ -253,6 +253,7 @@ class Crud_model extends CI_Model {
     public function get_limit_gallery() {
         $this->db->select('*');
         $this->db->from('gallery');
+        $this->db->where('category =', 'extrakurikuler');
         $this->db->limit(4);
         $query = $this->db->get();
         return $query;
